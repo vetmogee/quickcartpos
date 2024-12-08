@@ -1,0 +1,44 @@
+zari
+1. vytvorit projekt
+2. vytvorit zaznamovy list
+
+rijen
+1. technologie a planovani
+2. navrh databaze
+3. implementace databaze
+4. naplneni databaze vzorovymi daty
+
+listopad
+1. vytvoreni tabulky na prihlaseni a registrace
+2. vytvoreni frontendu projektu
+2. spojeni databaze s frontendem
+
+prosinec
+1. vytvoreni pokladni stranky
+2. propojeni pokladniho systemu s databazi
+3. kosmeticke upravy pokladniho systemu
+
+leden
+1. kosmeticke upravy stranky na prihlaseni
+2. kosmeticke upravy stranky na registraci
+3. vytvoreni a kosmeticke upravy info stranky
+
+unor
+1. spojovaci tabulky
+2. relace mezi tabulkama
+3. erd diagram databaze
+
+brezen
+1. doplneni databaze vice daty
+2. doladeni pokladniho systemu
+3. vytvoreni frontendu admin stranky
+
+duben
+1. pripojeni databze do admin stranky
+2. kosmeticke upravy admin stranky
+3. 
+
+kveten
+1. vytvoreni dokumentace
+2. testovani projektu
+3. ladeni projektu
