@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model ProductType {
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar
+  vatId         Int
+  fastMenuItems FastMenuItem[]
+  products      Product[]
+  vat           VAT            @relation(fields: [vatId], references: [id])
+
+  @@index([vatId])
+}
+
+model VAT {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar
+  vat          Int           @db.SmallInt
+  productTypes ProductType[]
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  barcode       String
+  name          String         @db.VarChar
+  price         Float
+  amountType    AmountType     @default(KS)
+  productTypeId Int
+  userId        Int
+  fastMenuItems FastMenuItem[]
+  orderItems    OrderItem[]
+  productType   ProductType    @relation(fields: [productTypeId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, barcode])
+  @@index([userId])
+  @@index([productTypeId])
+}
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  orderDate    DateTime    @default(now())
+  subTotal     Float?
+  dphTotal     Float?
+  total        Float
+  userId       Int
+  paidAmount   Float
+  returnAmount Float
+  user         User        @relation(fields: [userId], references: [id])
+  orderItems   OrderItem[]
+
+  @@index([userId])
+}
+
+model OrderItem {
+  productId   Int
+  orderId     Int
+  quantity    Float
+  priceAtTime Float
+  dphAtTime   Int
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([productId, orderId])
+  @@index([productId])
+  @@index([orderId])
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  ico           Int
+  fname         String         @db.VarChar
+  sname         String?        @db.VarChar
+  email         String         @unique
+  passwordHash  String
+  fastMenuItems FastMenuItem[]
+  orders        Order[]
+  products      Product[]
+}
+
+model FastMenuItem {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  productId     Int
+  productTypeId Int
+  displayOrder  Int?
+  product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productType   ProductType @relation(fields: [productTypeId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId, productTypeId])
+  @@index([userId])
+  @@index([productId])
+  @@index([productTypeId])
+}
+
+enum AmountType {
+  KS
+  KG
+}
